@@ -1,2 +1,2 @@
-compiler les fichiers sources en un seul fichier (bundler) : npm run dev
+compiler les fichiers sources en un seul fichier (bundler) : npm run watch
 lancer le serveur web : npm run serve
