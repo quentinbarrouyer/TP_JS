@@ -54,6 +54,7 @@ Une fois que le projet est mis en place, vous pouvez tout simplement suivre le T
     * [Ajouter une tâche dans la base de données](docs/http.md#ajouter-une-tâche-dans-la-base-de-données)
     * [Passer les éléments à "fait" ou "pas fait"](docs/http.md#passer-les-éléments-à--fait--ou--pas-fait-)
     * [Ce que vous avez appris](docs/http.md#ce-que-vous-avez-appris--)
+* [**Refactoring et modules**](docs/refactoring.md)
 * [**Routing et affichage dynamique**](docs/routing.md)
     * [But de l'exercice :](docs/routing.md#but-de-l-exercice--)
     * [Mise en place et premiers tests](docs/routing.md#mise-en-place-et-premiers-tests)
@@ -70,4 +71,3 @@ Une fois que le projet est mis en place, vous pouvez tout simplement suivre le T
     * [Le problème du HTML dans nos tests](docs/tests.md#le-problème-du-html-dans-nos-tests)
     * [Aller plus loin et tester notre application](docs/tests.md#aller-plus-loin-et-tester-notre-application)
     * [Ce que vous avez appris](docs/tests.md#ce-que-vous-avez-appris--)
-

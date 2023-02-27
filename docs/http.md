@@ -52,6 +52,8 @@ La création du projet peut durer quelques minutes et vous pourrez ensuite aller
 
 Vous pouvez enfin insérer des lignes selon vos choix afin d'avoir déjà des données d'exemple.
 
+Désactivez RLS en cliquant sur "RLS disable" en haut à droite.
+
 ## Comprendre comment fonctionne l'API de Supabase
 
 Avant de continuer, vous devrez tout de même essayer de comprendre l'API en vous rendant dans la documentation (icône de fichier sur la gauche) et en sélectionnant ***Bash*** sur l'onglet de droite pour véritablement voir les requêtes HTTP qui sont acceptables ainsi que les options.
