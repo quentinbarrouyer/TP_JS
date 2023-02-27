@@ -1,11 +1,3 @@
-// src/app.js
-
-// On créé ici un tableau TODO_ITEMS qui contient deux objets 
-const TODO_ITEMS = [
-    { id: 1, text: "Faire les courses", done: false },
-    { id: 2, text: "Aller chercher les enfants", done: true },
-];
-
 // Nous créons une fonction qui servira à ajouter un élément dans le UL à partir d'un objet tâche
 const addTodo = (item) => {
     // On sélectionne le <ul>
@@ -25,9 +17,24 @@ container.insertAdjacentHTML(
 );
 };
 
-// Pour chaque élément du tableau TODO_ITEMS, on appelle la fonction addTodo en fournissant
-// l'item
-TODO_ITEMS.forEach((item) => addTodo(item));
+
+
+const SUPABASE_URL = "https://nbiaxhslvvqyrjtugqem.supabase.co/rest/v1/todos";
+const SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5iaWF4aHNsdnZxeXJqdHVncWVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzc1MDc5MjQsImV4cCI6MTk5MzA4MzkyNH0.29GSRlgCEAY7kVEZBepiRjJQn5DaKZK1tIROgBm1Ihw";
+
+// Lorsque les éléments du DOM sont tous connus
+document.addEventListener("DOMContentLoaded", () => {
+  // Appel HTTP vers Supabase
+  fetch(`${SUPABASE_URL}?order=created_at`, {
+    headers: {
+      apiKey: SUPABASE_API_KEY,
+    },
+  })
+    .then((response) => response.json())
+    .then((items) => {
+      items.forEach((item) => addTodo(item));
+    });
+});
 
 
 
@@ -45,9 +52,6 @@ document.querySelector("form").addEventListener("submit", (event) => {
         text: input.value,
         done: false,
     };
-
-    //ajout de l'item dans la liste
-    TODO_ITEMS.push(item);
 
     // On appelle la fonction créée plus tôt qui ajoutera la tâche dans le <ul>
     addTodo(item);
