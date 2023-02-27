@@ -1,20 +1,26 @@
 // Nous créons une fonction qui servira à ajouter un élément dans le UL à partir d'un objet tâche
 const addTodo = (item) => {
     // On sélectionne le <ul>
-const container = document.querySelector("ul");
+    const container = document.querySelector("ul");
 
-// On ajoute du HTML à la fin du <ul>
-container.insertAdjacentHTML(
-    "beforeend",
-    `
-        <li>
-            <label>
-                <input type="checkbox" id="todo-${item.id}" ${item.done ? "checked" : ""} /> 
-                ${item.text}
-            </label>
-        </li>
-    `
-);
+    // On ajoute du HTML à la fin du <ul>
+    container.insertAdjacentHTML(
+        "beforeend",
+        `
+            <li>
+                <label>
+                    <input type="checkbox" id="todo-${item.id}" ${item.done ? "checked" : ""} /> 
+                    ${item.text}
+                </label>
+            </li>
+        `
+    );
+
+    document
+    // Nous sélectionnons la checkbox fraichement ajoutée au DOM
+    .querySelector("input#todo-" + item.id)
+    // Et nous lions la fonction onClickCheckbox au click 
+    .addEventListener("click", onClickCheckbox);
 };
 
 
@@ -48,15 +54,52 @@ document.querySelector("form").addEventListener("submit", (event) => {
 
     // On créé une nouvelle tâche avec pour text la valeur tapée dans l'input
     const item = {
-        id: Date.now(),
         text: input.value,
         done: false,
     };
 
-    // On appelle la fonction créée plus tôt qui ajoutera la tâche dans le <ul>
-    addTodo(item);
-
-    // On vide l'input et replace le curseur dedans
-    input.value = "";
-    input.focus();
+    fetch(SUPABASE_URL, {
+        method: "POST",
+        body: JSON.stringify(item),
+        headers: {
+            "Content-Type": "application/json",
+            apiKey: SUPABASE_API_KEY,
+            Prefer: "return=representation",
+        },
+    })
+    .then((response) => response.json())
+    .then((items) => {
+      addTodo(items[0]);
+      input.value = "";
+      input.focus();
+    });
 });
+
+
+
+// Nous souhaitons intervenir lors d'un click sur une checkbox
+const onClickCheckbox = (e) => {
+    // Nous récupérons l'identifiant de la checkbox (ressemble à "todo-1" ou "todo-23" ...)
+  const inputId = e.target.id; 
+  // Nous en déduisons l'identifiant de la tâche dans Supabase (ne récupérant que le nombre)
+  const id = +inputId.split("-").pop();  
+  // On découvre si la checkbox était déjà cochée ou pas
+  const isDone = e.target.checked;
+
+  // Nous empêchons le comportement par défaut de l'événement (cocher ou décocher)
+  e.preventDefault();
+
+  fetch(`${SUPABASE_URL}?id=eq.${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      apiKey: SUPABASE_API_KEY,
+      Prefer: "return=representation",
+    },
+    body: JSON.stringify({ done: isDone }),
+  }).then(() => {
+      // Lorsque le serveur a pris en compte la demande et nous a répond
+      // Nous cochons (ou décochons) la case
+    e.target.checked = isDone;
+  });
+};
