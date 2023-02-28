@@ -1,4 +1,5 @@
-import { loadTodoItemsFromApi } from "./api";
+import { loadTodoItemFromApi, loadTodoItemsFromApi } from "./api";
+import { onClickLink } from "./routing";
 
 
 
@@ -19,6 +20,7 @@ const addTodo = (item) => {
                     <input type="checkbox" id="todo-${item.id}" ${item.done ? "checked" : ""} /> 
                     ${item.text}
                 </label>
+                <a id="goto-${item.id}" href="/${item.id}/details">Détails</a>
             </li>
         `
     );
@@ -27,7 +29,14 @@ const addTodo = (item) => {
     document
         .querySelector("input#todo-" + item.id)
         .addEventListener("click", onClickCheckbox);
+
+    document
+        .querySelector('a#goto-' + item.id)
+        .addEventListener('click', onClickLink);
 };
+
+
+
 /**
  * Permet d'ajouter visuellement la liste des tâches dans l'interface
  */
@@ -66,4 +75,28 @@ const onSubmitForm = (e) => {
  */
 const onClickCheckbox = (e) => {
     // Code de gestion des checkbox ...
+};
+
+
+
+/**
+ * Affiche dans l'interface le détails d'une tâche
+ * @param {number} id 
+ */
+ export const displayTodoDetails = (id) => {
+    // On appelle l'API afin de récupérer une tâche
+    loadTodoItemFromApi(id).then((item) => {
+        // On injecte du HTML dans le <main> 
+        // (supprimant donc ce qu'il contient à ce stade)
+        document.querySelector("main").innerHTML = `
+                <h2>Détails de la tâche ${item.id}</h2>
+                <p><strong>Texte :</strong> ${item.text}</p>
+                <p><strong>Status : </strong> ${item.done ? "Complété" : "A faire"}</p>
+                <a id="back" href="/">Retour à la liste</a>
+            `;
+        
+        // On n'oublie pas que le lien doit être géré par le routeur
+        document.querySelector('a#back')
+            .addEventListener('click', onClickLink);
+    });
 };
