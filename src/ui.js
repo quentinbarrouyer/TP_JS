@@ -1,4 +1,4 @@
-import { loadTodoItemFromApi, loadTodoItemsFromApi } from "./api";
+import { loadTodoItemFromApi, loadTodoItemsFromApi, saveTodoItemToApi } from "./api";
 import { onClickLink } from "./routing";
 
 
@@ -66,7 +66,28 @@ export const displayTodoList = () => {
  * @param {Event} e
  */
 const onSubmitForm = (e) => {
-    // Code de gestion du formulaire ...
+    e.preventDefault();
+
+    // On récupère l' <input /> du formulaire
+    const input = document.querySelector('input[name="todo-text"]');
+  
+    // On créé une tâche avec la valeur de l'<input />
+    const item = {
+      text: input.value,
+      done: false,
+    };
+    
+    // On appelle l'API afin de sauver la nouvelle tâche
+    saveTodoItemToApi(item).then((items) => {
+      // La réponse de l'API est un tableau avec les tâches
+      // touchées par le traitement, on prend la première (la seule en fait)
+      // Et on l'affiche dans l'interface
+      addTodo(items[0]);
+  
+      // On vide l'<input /> et on remet le curseur dessus
+      input.value = "";
+      input.focus();
+    });
 };
 
 /**
@@ -74,7 +95,22 @@ const onSubmitForm = (e) => {
  * @param {MouseEvent} e
  */
 const onClickCheckbox = (e) => {
-    // Code de gestion des checkbox ...
+     // On récupère l'identifiant de la tâche cliquée (todo-1 ou todo-12 par exemple)
+  const inputId = e.target.id;
+  // On ne garde que la partie numérique (1 ou 12 par exemple)
+  const id = +inputId.split("-").pop();
+  // On récupère le fait que la checkbox soit cochée ou pas lors du click
+  const isDone = e.target.checked;
+
+  // On annule le comportement par défaut de l'événement (cocher ou décocher la case)
+  // Car on ne souhaite cocher / décocher que si le traitement va au bout
+  e.preventDefault();
+
+  // On appelle l'API afin de changer le statut de la tâche
+  toggleComplete(id, isDone).then(() => {
+    // Lorsque c'est terminé, on coche ou décoche la case
+    e.target.checked = isDone;
+  });
 };
 
 
