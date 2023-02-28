@@ -7,10 +7,10 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "webpack --mode development",
-    "watch": "webpack --mode development --watch",
-    "serve": "live-server --entry-file=./index.html"
+    "serve": "live-server --entry-file=./index.html",
+    "watch": "webpack --mode development --watch"
   },
   "repository": {
     "type": "git",
